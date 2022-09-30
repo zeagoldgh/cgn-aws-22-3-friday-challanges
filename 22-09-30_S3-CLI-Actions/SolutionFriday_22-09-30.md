@@ -3,17 +3,43 @@
 
 ## First Exercise : Upload static Website via Console
 
-1. Start your Sandbox 
+### 1. Start your Sandbox 
 
-![First](BildschirmfotoSandbox1.png)
+![Picture](BildschirmfotoSandbox1.png)
 
 You klick on that in Modules
 
 ____________________________
 
-![First](BildschirmfotoSandbox2.png)
+![Picture](BildschirmfotoSandbox2.png)
 
 Than you Start the Lab and wait so long the point next to AWS is green not red or yellow
 
 ____________________________
 
+### 2. Create a new S3 Bucket
+
+![Picture](BildschirmfotoSandbox3.png)
+
+After AWS lamp is green you click on AWS
+
+____________________________________
+
+![Picture](AWSBucketCreate1.png)
+
+Now you click on S3. 
+
+Little Info: You find that by me under Recently visited because i have use it recently
+
+_____________________________________
+
+![Picture](AWSBucketCreate2.png)
+
+You click on New bucket on the right site
+
+__________________________________
+
+![Picture](AWSBucketCreate3.png)
+
+Now you change the name of the bucket like " Lettuce" or other is your own choice not specified
+Than you scroll down and create the bucket on the button create bucket :D
