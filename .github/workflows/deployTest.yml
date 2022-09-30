@@ -22,4 +22,4 @@ jobs:
       - name: DeployTest
         run: |
           echo "start upload to S3"
-          aws s3 cp 22-09-30_S3-CLI-Actions/index.html s3://bucketname --acl public-read
+          aws s3 cp 22-09-30_S3-CLI-Actions/index.html s3://deploybucketdavidebschke --acl public-read
