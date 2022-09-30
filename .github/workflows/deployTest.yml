@@ -7,17 +7,19 @@ on:
   
   push:
     branches: [ "main" ]
-    
-
-
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY_ID: ${{secrets.ACCESSKEY}}
+      AWS_SECRET_ACCESS_KEY: ${{secrets.SECRETACCESSKEY}} 
+      AWS_SESSION_TOKEN: ${{secrets.SESSIONTOKEN}}
+      AWS_REGION: eu-central-1
 
     steps:
       - uses: actions/checkout@v3
-
       - name: DeployTest
         run: |
-          echo "Hello"
+          echo "start upload to S3"
+          aws s3 cp index.html s3://bucketname --acl public-red
