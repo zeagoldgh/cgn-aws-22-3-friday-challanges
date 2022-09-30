@@ -46,3 +46,26 @@ Now you change the name of the bucket like " Lettuce" or other is your own choic
 And change the region to your own Region
 Than you scroll down and create the bucket on the button create bucket :D
 </p>
+
+________________________________
+
+### 3. Drag and Drop the index.html
+
+That is not very difficult you open the bucket if you click on it and your file you would like to save on it for example index.html file you insert that per drag and drop
+
+
+
+
+
+
+
+## Second Exercise : Upload static Website via CLI
+
+Here you see the commands how do you need. It is on Mac and you can find mac shotcuts for your help
+
+first make command + Space and open the search with that . Write terminal and you can open the cli
+
+
+
+
+
