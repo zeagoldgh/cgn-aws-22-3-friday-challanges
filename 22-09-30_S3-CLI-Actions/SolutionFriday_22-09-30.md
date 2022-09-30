@@ -41,5 +41,8 @@ __________________________________
 
 ![Picture](AWSBucketCreate3.png)
 
-Now you change the name of the bucket like " Lettuce" or other is your own choice not specified
+<p>
+Now you change the name of the bucket like " Lettuce" or other is your own choice not specified.
+And change the region to your own Region
 Than you scroll down and create the bucket on the button create bucket :D
+</p>
