@@ -127,6 +127,6 @@ export default App;
     rel="stylesheet"
     href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css"
   />
-```
+``` my jsonsolution
 1. push your changes ( upload your page with github actions)
 1. check that the page loads the ec2 data (make sure your ec2 script creates a valid public json with the name `monitoring-data.json`  at the root directory)
