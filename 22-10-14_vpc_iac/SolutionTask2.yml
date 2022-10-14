@@ -1,0 +1,172 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Lab template
+
+# Lab VPC with public subnet and Internet Gateway
+
+Parameters:
+  LabVpcCidr:
+    Type: String
+    Default: 10.0.0.0/20
+
+  PublicSubnetCidr:
+    Type: String
+    Default: 10.0.0.0/24
+
+  AmazonLinuxAMIID:
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: /aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2
+
+Resources:
+  LabVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: !Ref LabVpcCidr
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+          - Key: Name
+            Value: Friday VPC
+
+    ###########
+    # Public Subnet
+    ###########
+
+  PublicSubnet:
+    Type: AWS::EC2::Subnet
+    DependsOn: LabVPC
+    Properties:
+      VpcId: !Ref LabVPC
+      MapPublicIpOnLaunch: true
+      CidrBlock: !Ref PublicSubnetCidr
+      AvailabilityZone: !Select
+        - 0
+        - !GetAZs
+          Ref: AWS::Region
+      Tags:
+        - Key: Name
+          Value: Public Subnet Friday
+
+    ###########
+    # App Security Group
+    ###########
+
+  AppSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    DependsOn: LabVPC
+    Properties:
+      GroupName: App
+      GroupDescription: Enable access to App
+      VpcId: !Ref LabVPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: App
+
+    ###########
+    # S3 Bucket
+    ###########
+
+  MyS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties: {
+      AccessControl: "PublicRead",
+      WebsiteConfiguration: {
+        IndexDocument: "index.html"
+      }
+        }
+  BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      PolicyDocument:
+        Id: MyPolicy
+        Version: 2012-10-17
+        Statement:
+        - Sid: PublicReadForGetBucketObjects
+          Effect: Allow
+          Principal: '*'
+          Action: 's3:GetObject'
+          Resource: !Join 
+            -   ''
+            - -   'arn:aws:s3:::'
+              -   !Ref MyS3Bucket
+              -   /*
+      Bucket: !Ref MyS3Bucket
+    
+    ###########
+    # Ec2 Instance
+    ###########
+
+  Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref AmazonLinuxAMIID
+      InstanceType: t3.micro
+      SecurityGroupIds:
+        - !Sub ${LabVPC.DefaultSecurityGroup}
+      SubnetId: !Ref PublicSubnet
+      Tags:
+        - Key: Name
+          Value: Friday Ec2
+      UserData:
+        Fn::Base64: 
+          !Sub |
+            #!/bin/bash
+            echo "start install"
+            yum update -y
+            echo "install webserver"
+            yum install -y httpd
+            systemctl enable httpd
+            systemctl start httpd
+            echo "<!DOCTYPE html>
+                  <html lang="en">
+                  <head>
+                      <meta charset="UTF-8">
+                      <title>Placepaca</title>
+                  </head>
+                  <style>
+                      html,body {
+                          height: 100%;
+                          background-color: #5d855d;
+                      }
+                      img {
+                          border-radius: 100px;
+                          position: absolute;
+                          top: 10px;
+                          left: 10px;
+                          transition: transform 1s;
+                      }
+                  </style>
+                  <body>
+                      <img id="alpaca" src="https://images.placepaca.com/Alpaka_10.jpg" width="100"/>
+                      <p>
+                          click to place alpaca
+                      </p>
+                  </body>
+                  <script>
+                      const alpaca = document.getElementById('alpaca');
+                      document.addEventListener('click', function(ev){
+                          alpaca.style.transform = 'translateY('+(ev.clientY-25)+'px)';
+                          alpaca.style.transform += 'translateX('+(ev.clientX-25)+'px)';
+                      },false);
+                  </script>
+                  </html>"
+
+###########
+# Outputs
+###########
+
+Outputs:
+  LabVPCDefaultSecurityGroup:
+    Value: !Sub ${LabVPC.DefaultSecurityGroup}
+  WebsiteURL:
+    Value: !GetAtt 
+      - MyS3Bucket
+      - WebsiteURL
+    Description: URL for website hosted on S3
+  S3BucketSecureURL:
+    Value: !Join ["",[https://, Test]] 
+    Description: Name of S3 bucket to hold website content'
