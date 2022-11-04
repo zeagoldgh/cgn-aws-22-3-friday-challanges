@@ -14,6 +14,7 @@ Exercise to learn the Basics about loadbalancing autoscaling and fastapi
 ### 3. Add a Loadbalancer
 1. Create a Terraform project to setup your ec2 instance with your fastapi
 1. add a load balancer to your infrastructure
+
 ### 4. Add a Autoscaling
 1. add  autoscaling to your infrastructure that everytime an instance crash a new instance will start
 
